@@ -109,7 +109,9 @@ namespace Alura.ByteBank.Infraestrutura.Testes
             Assert.True(atualizado);
         }
 
-        [Fact]
+#pragma warning disable xUnit1004 // Test methods should not be skipped
+        [Fact(Skip = "Este teste de exclusão só vai funcionar uma vez. Ignorar")]
+#pragma warning restore xUnit1004 // Test methods should not be skipped
         public void TestaRemoverInformacaoDeterminadaAgencia()
         {
             //Arrange
@@ -172,7 +174,7 @@ namespace Alura.ByteBank.Infraestrutura.Testes
             Assert.True(adicionado);
         }
 
-        public void Dispose()
+        internal void Dispose()
         {
             SaidaConsoleTeste.WriteLine("Destrutor invocado.");
         }
