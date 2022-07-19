@@ -70,6 +70,43 @@ namespace Alura.ByteBank.WebApp.Testes
             driver.FindElement(By.Id("home")).Click();
         }
 
+        [Fact]
+        public void ValidaLinkDeLoginHome()
+        {
+            //Arrange
+            driver.Navigate().GoToUrl("https://localhost:44309/");
+
+            var linkLogin = driver.FindElement(By.LinkText("Login"));
+            
+            //Act
+            linkLogin.Click();
+
+            //Assert
+            Assert.Contains("img", driver.PageSource);
+        }
+
+        [Fact]
+        public void TentaAcessarPaginaSemEstarLogado()
+        {
+            //Arrange
+            //Act
+            driver.Navigate().GoToUrl("https://localhost:44309/Agencia/Index");
+            //Assert
+            Assert.Contains("401", driver.PageSource);
+        }
+
+        [Fact]
+        public void AcessaPaginaSemEstarLogadoVerificaUrl()
+        {
+            //Arrange
+            //Act
+            driver.Navigate().GoToUrl("https://localhost:44309/Agencia/Index");
+            //Assert
+            Assert.Contains("https://localhost:44309/Agencia/Index", driver.Url);
+            Assert.Contains("401", driver.PageSource);
+        }
+
+
         public void Dispose()
         {
             driver.Quit();
