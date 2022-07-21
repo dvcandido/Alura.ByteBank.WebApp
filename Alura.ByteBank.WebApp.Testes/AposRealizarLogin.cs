@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using Alura.ByteBank.WebApp.Testes.PageObjects;
+using Alura.ByteBank.WebApp.Testes.Utilitarios;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
@@ -7,14 +9,14 @@ using System.Reflection;
 using Xunit;
 namespace Alura.ByteBank.WebApp.Testes
 {
-    public class AposRealizarLogin : IDisposable
+    public class AposRealizarLogin : IClassFixture<Gerenciador>
     {
         public IWebDriver driver { get; private set; }
         public IDictionary<String, Object> vars { get; private set; }
         public IJavaScriptExecutor js { get; private set; }
-        public AposRealizarLogin()
+        public AposRealizarLogin(Gerenciador gerenciador)
         {
-            driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            driver = gerenciador.Driver;
             js = (IJavaScriptExecutor)driver;
             vars = new Dictionary<String, Object>();
         }
@@ -24,17 +26,12 @@ namespace Alura.ByteBank.WebApp.Testes
         public void AposRealizarLoginVerificaSeExisteOpcaoAgenciaMenu()
         {
             //Arrange
-            driver.Navigate().GoToUrl("https://localhost:44309/UsuarioApps/Login");
-
-            var login = driver.FindElement(By.Id("Email"));
-            var senha = driver.FindElement(By.Id("Senha"));
-            var btnLogar = driver.FindElement(By.Id("btn-logar"));
-
-            login.SendKeys("andre@email.com");
-            senha.SendKeys("senha01");
+            var loginPO = new LoginPO(driver);
+            loginPO.Navegar("https://localhost:44309/UsuarioApps/Login");
+            loginPO.PreencherCampos("andre@email.com", "senha01");
 
             //Act
-            btnLogar.Click();
+            loginPO.Logar();
 
             //Assert
             Assert.Contains("Agência", driver.PageSource);
